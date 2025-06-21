@@ -6,9 +6,10 @@ import { useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function Index() {
-  
   const [username, setUsername] = useState ('');
   const [password, setPassword] = useState ('')
+
+  const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
   let [fontsLoaded] = useFonts({
     'Roboto': require('../assets/fonts/Roboto-VariableFont_wdth,wght.ttf')
@@ -20,7 +21,7 @@ export default function Index() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('https://campusbell-backend.onrender.com/auth/login',{
+      const response = await axios.post(`${apiUrl}/auth/login`,{
         username,
         password
       })
