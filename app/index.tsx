@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { Button, Card } from '@rneui/themed';
 import axios from 'axios';
 import AppLoading from 'expo-app-loading';
@@ -39,11 +40,23 @@ export default function Index() {
       
       <View style={styles.formContainer}>
       <Card containerStyle={{ backgroundColor:'#2f343a', borderRadius: 15, padding: 20 }}>
-        <Text style={styles.formLabel}>Username</Text>
-        <TextInput value={username} onChangeText={setUsername} placeholder='johnSmith123' style={styles.formInput} ></TextInput>
+        <View style={styles.formLabelPos}>
+        <Ionicons name='person' style={styles.labelicon} />
+        <Text style={styles.formLabel}> Username</Text>
+        </View>
+        <TextInput value={username} onChangeText={setUsername} 
+        placeholder='johnSmith123' 
+        placeholderTextColor='gray'
+        style={styles.formInput} ></TextInput>
 
-        <Text style={styles.formLabel}>Password</Text>
-        <TextInput value={password} onChangeText={setPassword} placeholder='Enter your password' secureTextEntry style={styles.formInput} ></TextInput>
+        <View style={styles.formLabelPos}>
+        <Ionicons name='lock-closed' style={styles.labelicon} />
+        <Text style={styles.formLabel}> Password</Text>
+        </View>
+        <TextInput value={password} onChangeText={setPassword} 
+        placeholder="Enter your password"
+        placeholderTextColor='gray'
+        secureTextEntry style={styles.formInput} ></TextInput>
       
        <Button
           title="Login" buttonStyle={{borderRadius: 15}}
@@ -66,7 +79,7 @@ const styles = StyleSheet.create({
       fontFamily: 'Roboto',
       color: 'white',
       fontSize: 18,
-      fontWeight: 200
+      fontWeight: 300
     },
     formLabel : {
       fontFamily: 'Roboto',
@@ -84,5 +97,14 @@ const styles = StyleSheet.create({
       color:'white',
       marginBottom: 10, 
       padding: 12
+    },
+    formLabelPos: {
+      flex: 1, 
+      flexDirection: 'row', 
+      alignItems:'center'
+    }, 
+    labelicon : {
+      color: 'white',
+      fontSize: 12
     }
 })
