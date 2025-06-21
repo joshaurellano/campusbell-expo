@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Button, Card } from '@rneui/themed';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from "expo-font";
 import { useState } from 'react';
@@ -8,9 +8,14 @@ import { StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function Index() {
   const [username, setUsername] = useState ('');
-  const [password, setPassword] = useState ('')
+  const [password, setPassword] = useState ('');
+  const [error, setError] = useState('');
 
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+
+  type ErrorResponseData = {
+  message: string;
+  };
 
   let [fontsLoaded] = useFonts({
     'Roboto': require('../assets/fonts/Roboto-VariableFont_wdth,wght.ttf')
@@ -27,8 +32,10 @@ export default function Index() {
         password
       })
       console.log(response)
-    } catch (error) {
-      console.error(error)
+    } catch(error) {
+      const err = error as AxiosError<ErrorResponseData>;
+      console.log(err?.response?.data?.message)
+      setError(err?.response?.data?.message || 'Unknown error occured')
     }
   } 
 
@@ -39,14 +46,14 @@ export default function Index() {
       </View>
       
       <View style={styles.formContainer}>
-      <Card containerStyle={{ backgroundColor:'#2f343a', borderRadius: 15, padding: 20 }}>
+      <Card containerStyle={styles.cardStyle}>
         <View style={styles.formLabelPos}>
         <Ionicons name='person' style={styles.labelicon} />
         <Text style={styles.formLabel}> Username</Text>
         </View>
         <TextInput value={username} onChangeText={setUsername} 
         placeholder='johnSmith123' 
-        placeholderTextColor='gray'
+        placeholderTextColor='#aaa'
         style={styles.formInput} ></TextInput>
 
         <View style={styles.formLabelPos}>
@@ -55,13 +62,16 @@ export default function Index() {
         </View>
         <TextInput value={password} onChangeText={setPassword} 
         placeholder="Enter your password"
-        placeholderTextColor='gray'
+        placeholderTextColor='#aaa'
         secureTextEntry style={styles.formInput} ></TextInput>
       
        <Button
           title="Login" buttonStyle={{borderRadius: 15}}
           onPress={() => handleLogin ()}
         />
+        {
+          error && <Text style={{color:'red'}}>{error}</Text>
+        }
       </Card>
       </View>
     </View>
@@ -79,24 +89,24 @@ const styles = StyleSheet.create({
       fontFamily: 'Roboto',
       color: 'white',
       fontSize: 18,
-      fontWeight: 300
+      fontWeight: 600
     },
     formLabel : {
       fontFamily: 'Roboto',
       color: 'white',
       fontSize: 16,
-      fontWeight: 100
+      fontWeight: 300
     },
     formContainer: {
       width: 280
     },
     formInput: {
-      borderRadius: 15,
-      borderWidth: .5, 
-      borderColor: 'white',
-      color:'white',
       marginBottom: 10, 
-      padding: 12
+      padding: 12,
+      backgroundColor: '#2f3545',
+      borderRadius: 10,
+      paddingHorizontal: 12,
+      color: '#fff'
     },
     formLabelPos: {
       flex: 1, 
@@ -106,5 +116,18 @@ const styles = StyleSheet.create({
     labelicon : {
       color: 'white',
       fontSize: 12
+    },
+    cardStyle: {
+      backgroundColor:'#2f343a', 
+      borderRadius: 15, 
+      padding: 24,
+      marginVertical: 12, 
+      borderWidth:.5, 
+      borderColor:'gray',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.3,
+      shadowRadius: 6,
+      elevation: 10, 
     }
 })
