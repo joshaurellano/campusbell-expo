@@ -3,8 +3,9 @@ import { Card } from '@rneui/themed';
 import axios from "axios";
 import { useRouter } from 'expo-router';
 import { jwtDecode } from "jwt-decode";
-import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import TimeAgo from 'react-native-timeago';
 
 const router = useRouter();
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -90,21 +91,24 @@ const fetchPosts = async () => {
   }
   return (
     <View style={styles.container}>
+      <ScrollView>
       {/* <Text>Home</Text> */}
 
       {
           posts && posts.map((data: PostData)=>(
-            <Card key={data.postID}>
-              <Text>{data.username}</Text>
-              <Text>{data.topic_name}</Text>
-              <Text>{data.date_posted}</Text>
-              <Text>{data.title}</Text>
-              <Text>{data.content}</Text>
+            <Card key={data.postID} containerStyle={styles.postCard}>
+              
+              <Text style={styles.cardText}>{data.topic_name} <TimeAgo time={data.date_posted} /></Text>
+              <Text style={styles.cardTitle}>{data.title}</Text>
+              <Text style={styles.cardText}>{data.username}</Text>
+              <Text style={styles.cardContent}>{data.content}</Text>
+              <Text style={styles.cardText}>Reacts {data.reactCount} Comments {data.commentCount}</Text>
             </Card>
             
           ))
         
       }
+      </ScrollView>
     </View>
   );
 }
@@ -114,5 +118,28 @@ const styles = StyleSheet.create({
     backgroundColor: '#25292e',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 15
+  },
+  postCard: {
+    backgroundColor: '#25292e',
+    borderWidth: 0,
+    borderBottomWidth: 1,
+  },
+  cardText: {
+    color: 'gray',
+    fontSize: 16,
+    marginBottom: 8
+
+  },
+  cardTitle: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 8
+  },
+  cardContent: {
+    color: 'white',
+    fontSize: 16,
+    marginBottom: 8
   }
 })
