@@ -1,12 +1,15 @@
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button, Card } from '@rneui/themed';
 import axios, { AxiosError } from 'axios';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from "expo-font";
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function Index() {
+  const [token, setToken] = useState <string| null>(null)
   const [username, setUsername] = useState ('');
   const [password, setPassword] = useState ('');
   const [error, setError] = useState('');
@@ -21,6 +24,8 @@ export default function Index() {
     'Roboto': require('../assets/fonts/Roboto-VariableFont_wdth,wght.ttf')
   });
 
+  const router = useRouter();
+
   if(!fontsLoaded) {
     return <AppLoading />
   }
@@ -30,8 +35,9 @@ export default function Index() {
       const response = await axios.post(`${apiUrl}/auth/login`,{
         username,
         password
-      })
-      console.log(response)
+      }, {headers : { 'X-Client-Type': 'mobile'}})
+      await AsyncStorage.setItem("token", response.data.token)
+      router.replace('/(tabs)')
     } catch(error) {
       const err = error as AxiosError<ErrorResponseData>;
       console.log(err?.response?.data?.message)
@@ -41,9 +47,7 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
-      <View>
       <Text style={styles.text}>Sign in to Campus Bell</Text>
-      </View>
       
       <View style={styles.formContainer}>
       <Card containerStyle={styles.cardStyle}>
