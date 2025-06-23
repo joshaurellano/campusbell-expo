@@ -5,7 +5,7 @@ import axios, { AxiosError } from 'axios';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from "expo-font";
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function Index() {
@@ -37,10 +37,11 @@ export default function Index() {
         password
       }, {headers : { 'X-Client-Type': 'mobile'}})
       await AsyncStorage.setItem("token", response.data.token)
-      router.replace('/(tabs)')
+      
+      router.replace('/(tabs)/home');
     } catch(error) {
+      // console.error(error)
       const err = error as AxiosError<ErrorResponseData>;
-      console.log(err?.response?.data?.message)
       setError(err?.response?.data?.message || 'Unknown error occured')
     }
   } 
