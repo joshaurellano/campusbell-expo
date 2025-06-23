@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Card } from '@rneui/themed';
 import axios from "axios";
 import { useRouter } from 'expo-router';
 import { jwtDecode } from "jwt-decode";
@@ -11,7 +12,7 @@ const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 export default function home() {
   const [token, setToken] = useState <string | any>(null)
   const [decodedToken, setDecodedToken] = useState<DecodedToken | null>(null)
-  const [posts, setPosts] = useState<PostData | null>(null)
+  const [posts, setPosts] = useState<PostData[] | null>(null)
 
 type DecodedToken = {
   user_id: number,
@@ -89,7 +90,21 @@ const fetchPosts = async () => {
   }
   return (
     <View style={styles.container}>
-      <Text>Home</Text>
+      {/* <Text>Home</Text> */}
+
+      {
+          posts && posts.map((data: PostData)=>(
+            <Card key={data.postID}>
+              <Text>{data.username}</Text>
+              <Text>{data.topic_name}</Text>
+              <Text>{data.date_posted}</Text>
+              <Text>{data.title}</Text>
+              <Text>{data.content}</Text>
+            </Card>
+            
+          ))
+        
+      }
     </View>
   );
 }
