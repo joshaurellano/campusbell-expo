@@ -1,13 +1,17 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import { useRouter } from 'expo-router';
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+
 const router = useRouter();
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 export default function home() {
   const [token, setToken] = useState <string | any>(null)
   const [decodedToken, setDecodedToken] = useState<DecodedToken | null>(null)
+  const [posts, setPosts] = useState<PostData | null>(null)
 
 type DecodedToken = {
   user_id: number,
@@ -15,6 +19,30 @@ type DecodedToken = {
   role_id: number,
   iat: number,
   exp: number
+}
+type PostData = {
+  postID:number,
+  title:string,
+  username:string,
+  topic_name:string,
+  content:string,
+  date_posted:string,
+  image: string,
+  commentCount:number,
+  comments: {
+    commentID:number,
+    username:string,
+    body:string,
+    date_posted:string
+  },
+  reactCount:number,
+  reactors: {
+    user_id:number,
+    username:string,
+    reactTime:string
+  }
+  reacted:boolean
+
 }
 const checkUserToken = async () => {
       const getToken = await AsyncStorage.getItem("token");
@@ -28,16 +56,37 @@ const checkUserToken = async () => {
 };
 
 const decodeToken = async () => {
+  if (token){
   const decodedToken = jwtDecode<DecodedToken>(token)
   setDecodedToken(decodedToken);
+  }
 }
+
+const fetchPosts = async () => {
+  if(decodedToken){
+  const id = decodedToken?.user_id
+
+    const postData = await axios.get(`${apiUrl}/post/all/${id}`,{headers: headers})
+    console.log(postData.data.result);
+    setPosts(postData.data.result);
+  }
+}
+
   useEffect (() => {
-    checkUserToken()
+    checkUserToken();
   }, [])
   useEffect (() => {
-    decodeToken()
+    decodeToken();
   },[token])
+   useEffect (() => {
+    fetchPosts();
+  },[decodedToken])
 
+
+  const headers = {
+    accept: "application/json",
+    Authorization: token
+  }
   return (
     <View style={styles.container}>
       <Text>Home</Text>
