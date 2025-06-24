@@ -38,7 +38,7 @@ export default function Index() {
       }, {headers : { 'X-Client-Type': 'mobile'}})
       await AsyncStorage.setItem("token", response.data.token)
       
-      router.replace('/(tabs)/home');
+      router.replace('/(tabs)/(home)');
     } catch(error) {
       // console.error(error)
       const err = error as AxiosError<ErrorResponseData>;

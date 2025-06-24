@@ -1,6 +1,8 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Tabs } from 'expo-router';
 
+// import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
 export default function TabLayout () {
   return (
     <Tabs  screenOptions={{
@@ -14,7 +16,7 @@ export default function TabLayout () {
     },
   }}>
       <Tabs.Screen 
-      name='home'
+      name='(home)'
       options={{
         title: "Home",
         tabBarIcon: ({ color, focused }) => (
@@ -52,3 +54,13 @@ export default function TabLayout () {
     </Tabs>
   )
 }
+// const Tab = createMaterialTopTabNavigator();
+
+// export function MyTabs(){
+//   return (
+//     <Tab.Navigator>
+//       <Tab.Screen name="Home" component={home} />
+//       <Tab.Screen name="sample" component={sample} />
+//     </Tab.Navigator>
+//   );
+// }
