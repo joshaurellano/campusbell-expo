@@ -4,7 +4,7 @@ import axios from "axios";
 import { useRouter } from 'expo-router';
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import TimeAgo from 'react-native-timeago';
 
 const router = useRouter();
@@ -102,6 +102,13 @@ const fetchPosts = async () => {
               <Text style={styles.cardTitle}>{data.title}</Text>
               <Text style={styles.cardText}>{data.username}</Text>
               <Text style={styles.cardContent}>{data.content}</Text>
+              <View style={styles.imageContainer}>
+              {
+                data.image && (
+                  <Image source={{uri:data.image}} style={styles.postImage} />
+                )
+              }
+              </View>
               <Text style={styles.cardText}>Reacts {data.reactCount} Comments {data.commentCount}</Text>
             </Card>
             
@@ -118,12 +125,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#25292e',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 15
   },
   postCard: {
     backgroundColor: '#25292e',
     borderWidth: 0,
     borderBottomWidth: 1,
+    marginHorizontal: 0, 
+    paddingHorizontal: 18
   },
   cardText: {
     color: 'gray',
@@ -140,6 +148,17 @@ const styles = StyleSheet.create({
   cardContent: {
     color: 'white',
     fontSize: 16,
+    marginBottom: 8
+  },
+  postImage: {
+    height:280, 
+    width:280,
+  },
+  imageContainer: {
+    flex: 1, 
+    justifyContent:"center",
+    alignItems:'center',
+    backgroundColor: '#f0f0f0',
     marginBottom: 8
   }
 })
