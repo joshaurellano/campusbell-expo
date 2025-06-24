@@ -10,7 +10,7 @@ import TimeAgo from 'react-native-timeago';
 const router = useRouter();
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
-export default function index() {
+export default function home() {
   const [token, setToken] = useState <string | any>(null)
   const [decodedToken, setDecodedToken] = useState<DecodedToken | null>(null)
   const [posts, setPosts] = useState<PostData[] | null>(null)

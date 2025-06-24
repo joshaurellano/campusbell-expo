@@ -13,7 +13,7 @@ export default function HomeTopTabsLayout() {
         tabBarIndicatorStyle: { backgroundColor: 'white' },
       }}
     >
-      <TopTabs.Screen name="index" options={{ title: 'Home' }} />
+      <TopTabs.Screen name="home" options={{ title: 'Home' }} />
       <TopTabs.Screen name="topics" options={{ title: 'Topic' }} />
     </TopTabs>
   );
